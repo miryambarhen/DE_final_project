@@ -13,7 +13,9 @@ col = db["users"]
 def user_registration():
     data = request.form.to_dict()
     if len(data) > 0:
+        # Add an indicator for active alert
         data.update({'is_active': 1})
+        # Save registration form in MonogoDB
         col.insert_one(data)
     return render_template("registration.html")
 

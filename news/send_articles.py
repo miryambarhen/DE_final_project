@@ -17,12 +17,12 @@ articles_col = db["articles"]
 
 # Get users choices data
 alerts = users_col.find({'news': 'on', 'is_active': 1},
-                        {'first_name': 1, 'email_address': 1, 'stock_name': 1, '_id': 0})
+                        {'first_name': 1, 'email_address': 1, 'stock_ticker': 1, '_id': 0})
 
 # Send email
 for user in alerts:
     recipient = user['email_address']
-    ticker = user['stock_name']
+    ticker = user['stock_ticker']
     name = user['first_name'][0].upper()+user['first_name'][1:]
     # Get articles from articles_col
     date = datetime.today().strftime('%Y-%m-%d')
