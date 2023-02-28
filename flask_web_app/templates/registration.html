@@ -1,0 +1,67 @@
+<link rel="stylesheet" href="/static/style.scss" type="text/css">
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Alerts Registration Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+</head>
+
+<body>
+<div class="wrapper">
+    <img src="/static/logo.png" alt="logo" class="center">
+    <form method="POST">
+        <div class="title">
+            Alerts Registration Form
+        </div>
+        <div class="form">
+            <div class="inputfield">
+                <label>First Name</label>
+                <input type="text" class="input" name="first_name" required>
+            </div>
+            <div class="inputfield">
+                <label>Last Name</label>
+                <input type="text" class="input" name="last_name" required>
+            </div>
+            <div class="inputfield">
+                <label>Email Address</label>
+                <input type="text" class="input" name="email_address" required>
+            </div>
+            <div class="inputfield">
+                <label>Stock Name</label>
+                <div class="custom_select">
+                    <select name="stock_name" id="stock_name" required>
+                        <option value="">Select</option>
+                        <option value="AAPL">Apple (AAPL)</option>
+                        <option value="MSFT">Microsoft (MSFT)</option>
+                        <option value="AMZN">Amazon (AMZN)</option>
+                        <option value="BRK-B">Berkshire Hathaway (BRK-B)</option>
+                        <option value="TSLA">Tesla (TSLA)</option>
+                        <option value="NVDA">Nvidia (NVDA)</option>
+                        <option value="V">Visa (V)</option>
+                        <option value="UNH">UnitedHealth (UNH)</option>
+                        <option value="XOM">Exxon Mobile (XOM)</option>
+                        <option value="META">Meta Platforms (META)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="inputfield">
+                <label>Price alert from</label>
+                <input type="text" class="input" name="price" required>
+            </div>
+            <div class="inputfield terms">
+                <label class="check">
+                    <input type="checkbox" name="news">
+                    <span class="checkmark"></span>
+                </label>
+                <p>Interested in receiving news and updates</p>
+            </div>
+            <div class="inputfield">
+                <input type="submit" value="Register" class="btn">
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>
