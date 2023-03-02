@@ -2,6 +2,7 @@ import json
 import mysql.connector
 from pymongo import MongoClient
 import batch.get_daily_data as data
+from datetime import datetime, timedelta
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -26,6 +27,7 @@ cursor = db.cursor()
 
 # Get ticker names
 ticker_names = tickers_col.distinct("ticker")
-_from = '2023-02-28'
+yesterday = datetime.now() - timedelta(days=1)
+_from = yesterday.strftime('%Y-%m-%d')
 # Call the function to receive and load polygon data
 data.load_data(db, cursor, polygon_key, ticker_names, _from, _from)

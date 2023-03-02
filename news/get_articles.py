@@ -1,7 +1,11 @@
 import requests
 import json
+import logs.logging_config as logging_config
 from datetime import datetime
 from pymongo import MongoClient
+
+# configure the logging system
+logger = logging_config.setup_logging()
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -45,3 +49,7 @@ for ticker in ticker_names:
             }
             articles.append(article_data)
         articles_col.insert_many(articles)
+        logger.info(f"Get articles for {ticker}")
+    else:
+        logger.warning(f"No articles about {ticker} were published today")
+

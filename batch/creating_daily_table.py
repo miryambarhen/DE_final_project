@@ -1,6 +1,5 @@
 import mysql.connector
 import json
-import logging
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -20,7 +19,7 @@ cursor = db.cursor()
 # Execute the SQL statement to create the table
 cursor.execute("""
   CREATE TABLE IF NOT EXISTS daily_stocks (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT,
     ticker VARCHAR(10), 
     volume FLOAT,
     volume_weighted FLOAT,
@@ -28,9 +27,16 @@ cursor.execute("""
     close_price FLOAT,
     highest_price FLOAT,
     lowest_price FLOAT,
-    date TIMESTAMP,
-    transactions_number INT
+    business_day DATE,
+    transactions_number INT,
+    PRIMARY KEY (id, business_day)
   )
+PARTITION BY RANGE(YEAR(business_day)) (
+    PARTITION p2020 VALUES LESS THAN (2021),
+    PARTITION p2021 VALUES LESS THAN (2022),
+    PARTITION p2022 VALUES LESS THAN (2023),
+    PARTITION p2023 VALUES LESS THAN (2024)
+);
 """)
 
 # Close the database connection

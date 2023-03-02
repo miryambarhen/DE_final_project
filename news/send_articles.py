@@ -4,6 +4,10 @@ from email.mime.text import MIMEText
 from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from pymongo import MongoClient
+import logs.logging_config as logging_config
+
+# configure the logging system
+logger = logging_config.setup_logging()
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -49,5 +53,7 @@ for user in alerts:
         server.sendmail(msg['From'], msg['To'], text)
         # Close the connection to the SMTP server
         server.quit()
+        logger.info(f"Articles about {ticker} were sent to {recipient}")
+
 
 
