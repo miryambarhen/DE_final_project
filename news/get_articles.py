@@ -5,7 +5,7 @@ from datetime import datetime
 from pymongo import MongoClient
 
 # configure the logging system
-logger = logging_config.setup_logging()
+logger = logging_config.setup_logging('get articles')
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -37,19 +37,24 @@ for ticker in ticker_names:
     # loop through the articles in the API response and extract the data for the first three
     if len(data['results']) > 0:
         for i, article in enumerate(data['results'][:3]):
-            article_data = {
-                '_id': ticker + ':' + date + ':' + str(i + 1),
-                'date': date,
-                'ticker': ticker,
-                'published_at': article['published_utc'],
-                'title': article['title'],
-                'publisher': article['publisher']['name'],
-                'author': article['author'],
-                'article': article['article_url']
-            }
-            articles.append(article_data)
-        articles_col.insert_many(articles)
-        logger.info(f"Get articles for {ticker}")
+            article_id = ticker + ':' + date + ':' + str(i + 1)
+            if articles_col.find_one({"_id": article_id}) is None:
+                article_data = {
+                    '_id': article_id,
+                    'date': date,
+                    'ticker': ticker,
+                    'published_at': article['published_utc'],
+                    'title': article['title'],
+                    'publisher': article['publisher']['name'],
+                    'author': article['author'],
+                    'article': article['article_url']
+                }
+                articles.append(article_data)
+            else:
+                logger.warning(f"Article with _id {article_id} already exists in articles collection")
+        if articles:
+            articles_col.insert_many(articles)
+            logger.info(f"Get articles for {ticker}")
     else:
         logger.warning(f"No articles about {ticker} were published today")
 

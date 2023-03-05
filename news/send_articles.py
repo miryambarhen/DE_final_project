@@ -7,7 +7,7 @@ from pymongo import MongoClient
 import logs.logging_config as logging_config
 
 # configure the logging system
-logger = logging_config.setup_logging()
+logger = logging_config.setup_logging('send articles')
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
