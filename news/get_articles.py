@@ -1,11 +1,9 @@
+import logging
 import requests
 import json
-import logs.logging_config as logging_config
+from logs.logging_config import write_to_log
 from datetime import datetime
 from pymongo import MongoClient
-
-# configure the logging system
-logger = logging_config.setup_logging('get articles')
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -51,10 +49,10 @@ for ticker in ticker_names:
                 }
                 articles.append(article_data)
             else:
-                logger.warning(f"Article with _id {article_id} already exists in articles collection")
+                write_to_log('get articles', f'Article with _id {article_id} already exists in articles collection', level=logging.ERROR)
         if articles:
             articles_col.insert_many(articles)
-            logger.info(f"Get articles for {ticker}")
+            write_to_log('get articles', f'Get articles for {ticker}')
     else:
-        logger.warning(f"No articles about {ticker} were published today")
+        write_to_log('get articles', f'No articles about {ticker} were published today', level=logging.ERROR)
 

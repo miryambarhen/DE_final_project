@@ -3,7 +3,7 @@ from elasticsearch import Elasticsearch
 # create an Elasticsearch client
 es_client = Elasticsearch()
 
-# search for all log messages with level INFO
+# search for the last log message with level INFO
 search_results = es_client.search(
     index='logs',
     body={
@@ -11,10 +11,29 @@ search_results = es_client.search(
             'match': {
                 'level': 'INFO'
             }
-        }
+        },
+        'sort': {
+            'timestamp': {
+                'order': 'desc'
+            }
+        },
+        'size': 1
     }
 )
 
-# print each log message
-for hit in search_results['hits']['hits']:
-    print(hit['_source']['timestamp'], hit['_source']['level'], hit['_source']['message'])
+# print the last log message
+if search_results['hits']['hits']:
+    last_message = search_results['hits']['hits'][0]['_source']
+    print(last_message['timestamp'], last_message['level'], last_message['message'])
+else:
+    print('No log messages found')
+
+# delete all documents in the 'logs' index
+# es_client.delete_by_query(
+#     index='logs',
+#     body={
+#         'query': {
+#             'match_all': {}
+#         }
+#     }
+# )
