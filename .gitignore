@@ -1,4 +1,0 @@
-# Project exclude paths
-/venv/
-logs/logger.log
-config.json
