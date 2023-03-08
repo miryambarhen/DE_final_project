@@ -7,9 +7,9 @@ from datetime import datetime, timedelta
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
     config = json.load(f)
-polygon_key = config['polygon_key']
+    polygon_key = config['polygon_key']
 
-# # Connect to MongoDB
+# Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")
 db = client["stocks_db"]
 tickers_col = db["tickers"]
