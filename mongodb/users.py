@@ -9,5 +9,5 @@ col = db["users"]
 results = list(col.find())
 
 # Convert data to DataFrame
-df = pd.DataFrame(results, columns=["first_name", "last_name", "email_address", "ticker", "price", "news", "is_active"])
+df = pd.DataFrame(results, columns=["first_name", "last_name", "email_address", "stock_ticker", "price", "news", "is_active"])
 print(df)
