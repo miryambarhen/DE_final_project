@@ -38,7 +38,7 @@ for user in alerts:
         body = f'Hi {name},\n\n\nBelow are articles that may interest you:\n\n'
         for article in articles:
             body += f'{article["title"]} ({article["publisher"]}) -\n {article["article"]} \n\n'
-        body += '\n\nkind regards,\nNaya Trades team'
+        body += '\n\nbest regards,\nNaya Trades Team'
         # Attach the body to the email message
         msg.attach(MIMEText(body, 'plain'))
         # Connect to the SMTP server
