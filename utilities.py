@@ -15,7 +15,7 @@ def send_email(recipient, subject, body, message):
     msg['From'] = 'Naya Trades'
     msg['To'] = recipient
     msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+    msg.attach(MIMEText(body, 'html'))
     # Connect to the SMTP server
     server = smtplib.SMTP(config['email']['smtp_server'], config['email']['smtp_port'])
     server.starttls()

@@ -20,14 +20,19 @@ for user in alerts:
     # Get articles from articles_col
     date = datetime.today().strftime('%Y-%m-%d')
     articles = articles_col.find({'date': date, 'ticker': ticker},
-                                 {'title': 1, 'publisher': 1, 'article': 1, '_id': 0})
+                                 {'title': 1, 'publisher': 1, 'article': 1, 'published_at': 1, 'author': 1, '_id': 0})
     if articles.count() > 0:
         subject = f'Articles about {ticker} stock published today'
         # Create the body of the email
-        body = f'Hi {name},\n\n\nBelow are articles that may interest you:\n\n'
+        body = f'<html><head><style>table {{ border-collapse: collapse; }} th, td {{ border: 1px solid #ddd; padding: 12px; }} th {{ text-align: left; background-color: #f2f2f2; }}</style></head><body style="font-family: Arial, sans-serif;">'
+        body += f'<p style="font-size: 18px; font-weight: bold; margin-top: 0;">Dear {name},</p>'
+        body += f'<p style="font-size: 16px; margin-bottom: 24px;">Below are articles about {ticker} stock published today:</p>'
+        body += '<table style="width: 100%; font-size: 14px;">'
+        body += '<tr><th style="text-align: left;">Date Published</th><th style="text-align: left;">Article Name</th><th style="text-align: left;">Publisher</th><th style="text-align: left;">Author</th></tr>'
         for article in articles:
-            body += f'{article["title"]} ({article["publisher"]}) -\n {article["article"]} \n\n'
-        body += '\n\nbest regards,\nNaya Trades Team'
+            body += f'<tr><td>{article["published_at"]}</td><td><a href="{article["article"]}" target="_blank" style="text-decoration: none; color: #0366d6;">{article["title"]}</a></td><td>{article["publisher"]}</td><td>{article["author"]}</td></tr>'
+        body += '</table>'
+        body += '<p style="font-size: 14px; margin-top: 24px; margin-bottom: 0;">Best regards,</p><p style="font-size: 14px; margin-top: 0; margin-bottom: 0;">Naya Trades Team</p></body></html>'
         # Message for log
         message = f'Articles about {ticker} were sent to {recipient}'
         # Call to send_email function

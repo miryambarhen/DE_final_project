@@ -28,10 +28,12 @@ for message in consumer:
         mongo_collection.update_one({"_id": ObjectId(request_id)}, {"$set": {"is_active": 0}})
 
         subject = f'{stock_ticker} got to the price you wanted!'
-        body = f'Hi {name},\n\n\n' \
-               f'Further to your request, we inform you that the {stock_ticker} stock has reached a price of {wanted_price:.2f}$\n\n' \
-               f'To submit another request, you are welcome to enter the form again, and we will be happy to track the stocks for you :)'
-        body += '\n\nbest regards,\nNaya Trades Team'
+        body = f'<html><body><p style="margin-bottom: 10px;"><strong>Hi {name},</strong></p>' \
+               f'<p style="margin-top: 0px;">Further to your request,<br>' \
+               f'<style="margin-top: 0px; margin-bottom: 10px;">we inform you that the <strong>{stock_ticker}</strong> stock has reached a price of <strong>{wanted_price:.2f}</strong>$</p>' \
+               f'<p>To submit another request you are welcome to enter the form again, and we will be happy to track the stocks for you :)</p>' \
+               f'<p style="margin-top: 10px; margin-bottom: 0px;">Best regards,</p>' \
+               f'<p style="margin-top: 0px;">Naya Trades Team</p></body></html>'
         # Message for log
         message = f'Alert about {stock_ticker} was sent to {recipient}'
         # Call to send_email function
