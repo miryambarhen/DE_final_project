@@ -40,9 +40,9 @@ for message in consumer:
         msg['From'] = 'Naya Trades'
         msg['To'] = recipient
         msg['Subject'] = f'{stock_ticker} got to the price you wanted!'
-        body = f'Hi {name},\n\n\n \
-                Further to your request, we inform you that the {stock_ticker} stock has reached a price of {wanted_price:.2f}$\n \
-                To submit another request, you are welcome to enter the form again, and we will be happy to track the stocks for you :)'
+        body = f'Hi {name},\n\n\n' \
+               f'Further to your request, we inform you that the {stock_ticker} stock has reached a price of {wanted_price:.2f}$\n\n' \
+               f'To submit another request, you are welcome to enter the form again, and we will be happy to track the stocks for you :)'
         body += '\n\nbest regards,\nNaya Trades Team'
         msg.attach(MIMEText(body, 'plain'))
 
