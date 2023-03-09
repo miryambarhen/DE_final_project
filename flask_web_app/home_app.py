@@ -2,7 +2,8 @@ import json
 import os
 import mysql.connector
 from pymongo import MongoClient
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request
+from logs.logging_config import write_to_log
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -65,7 +66,7 @@ def index():
 
     except Exception as e:
         # log error
-        app.logger.error(str(e))
+        # app.logger.error(str(e))
         # return error message to user
         return "Error occurred while retrieving stock data.", 500
 
@@ -78,6 +79,7 @@ def register():
         data.update({'is_active': 1})
         # Save registration form in MonogoDB
         users.insert_one(data)
+        write_to_log('registration form', f'{data["email_address"]} registered for alerts')
     return render_template("registration.html")
 
 
