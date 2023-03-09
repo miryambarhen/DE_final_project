@@ -1,14 +1,6 @@
-import smtplib
-import json
-from email.mime.text import MIMEText
+import utilities
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
 from pymongo import MongoClient
-from logs.logging_config import write_to_log
-
-# Get configuration data
-with open('/tmp/pycharm_project_4/config.json') as f:
-    config = json.load(f)
 
 # Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")
@@ -24,33 +16,19 @@ alerts = users_col.find({'news': 'on', 'is_active': 1},
 for user in alerts:
     recipient = user['email_address']
     ticker = user['stock_ticker']
-    name = user['first_name'][0].upper()+user['first_name'][1:]
+    name = user['first_name'][0].upper() + user['first_name'][1:]
     # Get articles from articles_col
     date = datetime.today().strftime('%Y-%m-%d')
     articles = articles_col.find({'date': date, 'ticker': ticker},
                                  {'title': 1, 'publisher': 1, 'article': 1, '_id': 0})
-    if articles.count()>0:
-        msg = MIMEMultipart()
-        msg['From'] = 'Naya Trades'
-        msg['To'] = recipient
-        msg['Subject'] = f'Articles about {ticker} stock published today'
+    if articles.count() > 0:
+        subject = f'Articles about {ticker} stock published today'
         # Create the body of the email
         body = f'Hi {name},\n\n\nBelow are articles that may interest you:\n\n'
         for article in articles:
             body += f'{article["title"]} ({article["publisher"]}) -\n {article["article"]} \n\n'
         body += '\n\nbest regards,\nNaya Trades Team'
-        # Attach the body to the email message
-        msg.attach(MIMEText(body, 'plain'))
-        # Connect to the SMTP server
-        server = smtplib.SMTP(config['email']['smtp_server'], config['email']['smtp_port'])
-        server.starttls()
-        server.login(config['email']['sender'], config['email']['password'])
-        # Send the email
-        text = msg.as_string()
-        server.sendmail(msg['From'], msg['To'], text)
-        # Close the connection to the SMTP server
-        server.quit()
-        write_to_log('send articles', f'Articles about {ticker} were sent to {recipient}')
-
-
-
+        # Message for log
+        message = f'Articles about {ticker} were sent to {recipient}'
+        # Call to send_email function
+        utilities.send_email(recipient, subject, body, message)
