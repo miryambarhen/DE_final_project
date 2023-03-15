@@ -31,7 +31,7 @@ for message in consumer:
         body = f'<html><body><p style="margin-bottom: 10px;"><strong>Hi {name},</strong></p>' \
                f'<p style="margin-top: 0px;">Further to your request,<br>' \
                f'<style="margin-top: 0px; margin-bottom: 10px;">we inform you that the <strong>{stock_ticker}</strong> stock has reached a price of <strong>{wanted_price:.2f}</strong>$</p>' \
-               f'<p>To submit another request you are welcome to enter the form again, and we will be happy to track the stocks for you :)</p>' \
+               f'<p>To submit another request you are welcome to <a href="http://127.0.0.1:5000">enter our site again</a>, and we will be happy to track the stocks for you :)</p>' \
                f'<p style="margin-top: 10px; margin-bottom: 0px;">Best regards,</p>' \
                f'<p style="margin-top: 0px;">Naya Trades Team</p></body></html>'
         # Message for log

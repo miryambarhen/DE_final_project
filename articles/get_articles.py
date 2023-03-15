@@ -32,11 +32,11 @@ for ticker in ticker_names:
 
     # Create a list to hold the dictionaries for the three articles
     articles = []
-    # loop through the articles in the API response and extract the data for the first three
+    # loop through the articles in the API response and extract the data
     if len(data['results']) > 0:
-        for i, article in enumerate(data['results'][:3]):
+        for i, article in enumerate(data['results']):
             article_id = ticker + ':' + date + ':' + str(i + 1)
-            if articles_col.find_one({"_id": article_id}) is None:
+            if articles_col.find_one({"title": article['title'], "published_at": article['published_utc']}) is None:
                 article_data = {
                     '_id': article_id,
                     'date': date,
@@ -49,10 +49,10 @@ for ticker in ticker_names:
                 }
                 articles.append(article_data)
             else:
-                write_to_log('get articles', f'Article with _id {article_id} already exists in articles collection', level=logging.ERROR)
+                write_to_log('get articles', f'Article {article["title"]} for {ticker} already exists in articles collection',
+                             level=logging.ERROR)
         if articles:
             articles_col.insert_many(articles)
-            write_to_log('get articles', f'Get articles for {ticker}')
+            write_to_log('get articles', f'Get {i + 1} articles for {ticker}')
     else:
         write_to_log('get articles', f'No articles about {ticker} were published today', level=logging.ERROR)
-

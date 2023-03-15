@@ -1,9 +1,11 @@
+import time
 import json
 import os
 import mysql.connector
 from pymongo import MongoClient
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash, redirect, url_for
 from logs.logging_config import write_to_log
+from urllib.parse import urlencode
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -25,7 +27,6 @@ mysql_conn = mysql.connector.connect(
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or "my-secret-key"
-
 
 @app.route('/')
 def index():
@@ -66,7 +67,7 @@ def index():
 
     except Exception as e:
         # log error
-        # app.logger.error(str(e))
+        write_to_log('registration form', 'Error occurred while retrieving stock data')
         # return error message to user
         return "Error occurred while retrieving stock data.", 500
 
@@ -79,8 +80,10 @@ def register():
         data.update({'is_active': 1})
         # Save registration form in MonogoDB
         users.insert_one(data)
-        write_to_log('registration form', f'{data["email_address"]} registered for alerts')
-    return render_template("registration.html")
+        write_to_log('registration form', f'{data["email_address"]} registered for alerts for{data["stock_ticker"]}')
+        # Redirect to home page
+        return redirect(url_for('index'))
+    return render_template("registration.html", with_categories=True)
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
 import logging
 import requests
-import datetime
+from datetime import datetime
 from logs.logging_config import write_to_log
 
 
@@ -17,16 +17,17 @@ def get_data(polygon_key, ticker_names, _from, to):
               f'?adjusted=true&sort=asc&apiKey={polygon_key}'
         response = requests.get(url)
         data = response.json()
+        date = datetime.now().strftime('%Y-%m-%d')
         if 'results' in data:
             for d in data['results']:
                 timestamp = d['t'] / 1000.0  # Divide by 1000 to convert milliseconds to seconds
-                datetime_obj = datetime.datetime.fromtimestamp(timestamp)  # Convert the timestamp to a datetime object
+                datetime_obj = datetime.fromtimestamp(timestamp)  # Convert the timestamp to a datetime object
                 date = datetime_obj.date()  # Extract the date from the datetime object
                 stocks_data = [ticker, d['v'], d['vw'], d['o'], d['c'], d['h'], d['l'], date, d['n']]
                 data_for_loading.append(stocks_data)
             write_to_log('daily stocks data', f'Get data from the polygon API about {ticker} on {date}')
         else:
-            write_to_log('daily stocks data', f'No data exists for {ticker} on the {date}', level=logging.WARNING())
+            write_to_log('daily stocks data', f'No data exists for {ticker} on the {date}', level=logging.WARNING)
     return data_for_loading
 
 
@@ -48,5 +49,5 @@ def load_data(db, cursor, polygon_key, ticker_names, _from, to):
             rowcount += 1
             db.commit()
     # Print the number of rows inserted
-    write_to_log('daily stocks data', f'{rowcount} rows inserted on {datetime.date.today()}')
+    write_to_log('daily stocks data', f'{rowcount} rows inserted on {datetime.today().date()}')
     db.close()

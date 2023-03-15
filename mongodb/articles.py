@@ -13,4 +13,6 @@ df = pd.DataFrame(results, columns=["date", "ticker", "published_at", "title", "
 # Set display option to show all columns
 pd.set_option("display.max_columns", None)
 
-print(df)
+max_date = df["date"].max()
+max_date_rows = df[df["date"] == max_date]
+print(max_date_rows)

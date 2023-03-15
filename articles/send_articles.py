@@ -28,7 +28,7 @@ for user in alerts:
         body += f'<p style="font-size: 18px; font-weight: bold; margin-top: 0;">Dear {name},</p>'
         body += f'<p style="font-size: 16px; margin-bottom: 24px;">Below are articles about {ticker} stock published today:</p>'
         body += '<table style="width: 100%; font-size: 14px;">'
-        body += '<tr><th style="text-align: left;">Date Published</th><th style="text-align: left;">Article Name</th><th style="text-align: left;">Publisher</th><th style="text-align: left;">Author</th></tr>'
+        body += '<tr><th style="text-align: left;">Date Published</th><th style="text-align: left;">Article</th><th style="text-align: left;">Publisher</th><th style="text-align: left;">Author</th></tr>'
         for article in articles:
             body += f'<tr><td>{article["published_at"]}</td><td><a href="{article["article"]}" target="_blank" style="text-decoration: none; color: #0366d6;">{article["title"]}</a></td><td>{article["publisher"]}</td><td>{article["author"]}</td></tr>'
         body += '</table>'
