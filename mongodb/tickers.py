@@ -27,3 +27,4 @@ tickers_list = [
 # show the data
 for x in col.find():
     print(x)
+

@@ -72,7 +72,6 @@ def index():
         # return error message to user
         return "Error occurred while retrieving stock data.", 500
 
-
 @app.route('/register', methods=["GET", "POST"])
 def register():
     # Retrieve ticker data from MongoDB
