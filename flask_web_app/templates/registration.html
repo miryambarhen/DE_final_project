@@ -33,21 +33,9 @@
                 <div class="custom_select">
                     <select name="stock_ticker" id="stock_ticker" required>
                         <option value="">Select</option>
-                        <option value="AAPL">Apple (AAPL)</option>
-                        <option value="ABNB">Airbnb (ABNB)</option>
-                        <option value="AMZN">Amazon (AMZN)</option>
-                        <option value="EBAY">eBay (EBAY)</option>
-                        <option value="GOOGL">Alphabet Inc Class A (GOOGL)</option>
-                        <option value="KO">Coca-Cola (KO)</option>
-                        <option value="MCD">McDonald's (MCD)</option>
-                        <option value="META">Meta Platforms (META)</option>
-                        <option value="MSFT">Microsoft (MSFT)</option>
-                        <option value="NKE">Nike (NKE)</option>
-                        <option value="NFLX">Netflix (NFLX)</option>
-                        <option value="PYPL">PayPal (PYPL)</option>
-                        <option value="SBUX">Starbucks (SBUX)</option>
-                        <option value="TSLA">Tesla (TSLA)</option>
-                        <option value="UBER">Uber(UBER)</option>
+                        {% for ticker in tickers %}
+                        <option value="{{ ticker }}">{{ ticker }}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>

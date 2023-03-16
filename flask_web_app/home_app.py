@@ -16,6 +16,7 @@ client = MongoClient('mongodb://localhost:27017/')
 db = client['stocks_db']
 col = db["realtime_data"]
 users = db["users"]
+tickers = db["tickers"]
 
 # Connect to MySQL database
 mysql_conn = mysql.connector.connect(
@@ -74,8 +75,13 @@ def index():
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
-    data = request.form.to_dict()
-    if len(data) > 0:
+    # Retrieve ticker data from MongoDB
+    ticker_data = list(tickers.find({}, {"_id": 0, "ticker": 1, "name": 1}).sort("ticker", 1))
+    # format the ticker data
+    formatted_ticker_data = [f"{t['name']} ({t['ticker']})" for t in ticker_data]
+
+    if request.method == "POST" and len(request.form) > 1:
+        data = request.form.to_dict()
         # Add an indicator for active alert
         data.update({'is_active': 1})
         # Save registration form in MonogoDB
@@ -83,8 +89,8 @@ def register():
         write_to_log('registration form', f'{data["email_address"]} registered for alerts for{data["stock_ticker"]}')
         # Redirect to home page
         return redirect(url_for('index'))
-    return render_template("registration.html", with_categories=True)
-
+    # pass the formatted ticker data to the template
+    return render_template('registration.html', tickers=formatted_ticker_data)
 
 if __name__ == '__main__':
     app.run(debug=True)
