@@ -1,46 +1,36 @@
+import os
 import sys
-from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
-from airflow.operators.python_operator import PythonOperator
+from datetime import datetime, timedelta
 
-# Add the project directory to the Python path
-sys.path.insert(0, '/tmp/pycharm_project_4')
-
-def install_dependencies():
-    try:
-        from pip._internal import main as pipmain
-    except:
-        from pip import main as pipmain
-    pipmain(['install', '-r', '/tmp/pycharm_project_4/requirements.txt'])
+# Add the path to the project directory to the Python path
+project_dir = '/tmp/pycharm_project_4'
+batch_dir = os.path.join(project_dir, 'batch')  # Add the path to the batch directory
+sys.path.append(project_dir)
+sys.path.append(batch_dir)  # Add the path to the batch directory to the Python path
 
 default_args = {
-    'owner': 'airflow',
+    'owner': 'Naya Trades',
     'depends_on_past': False,
-    'start_date': datetime(2023, 3, 14),
-    'retries': 1
+    'start_date': datetime(2023, 3, 16),
+    'retries': 0
 }
 
 dag = DAG(
-    'daily_loading_dag',
+    'daily_loading',
     default_args=default_args,
-    description='Get and load daily data on monday-friday at 00:00',
-    schedule_interval='0 0 * * 1-5'
+    description='Loads daily data into MySQL database',
+    schedule_interval='0 0 * * 1-5',  # Run on weekdays at 00:00
+    catchup=False
 )
 
-# Define the PythonOperator that installs the required packages
-install_deps = PythonOperator(
-    task_id='install_dependencies',
-    python_callable=install_dependencies,
+load_data_task = BashOperator(
+    task_id='load_data',
+    bash_command='python {}/batch/daily_loading.py'.format(project_dir),
     dag=dag
 )
 
-# Define the BashOperator that runs the script
-run_script = BashOperator(
-    task_id='run_daily_loading_script',
-    bash_command='python /tmp/pycharm_project_4/batch/daily_loading.py',
-    dag=dag
-)
+load_data_task
 
-# Define the dependencies between the tasks
-install_deps >> run_script
+
