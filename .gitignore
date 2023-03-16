@@ -1,4 +1,4 @@
 # Project exclude paths
 /venv/
-logs/*.log
+logs/my_logs.log
 config.json
