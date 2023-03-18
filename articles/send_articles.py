@@ -1,6 +1,6 @@
-import utilities
 from datetime import datetime
 from pymongo import MongoClient
+import utilities
 
 # Connect to MongoDB
 client = MongoClient("mongodb://localhost:27017/")
@@ -20,9 +20,9 @@ for user in alerts:
     name = user['first_name'][0].upper() + user['first_name'][1:]
     # Get articles from articles_col
     date = datetime.today().strftime('%Y-%m-%d')
-    articles = articles_col.find({'date': date, 'ticker': ticker},
-                                 {'title': 1, 'publisher': 1, 'article': 1, 'published_at': 1, 'author': 1, '_id': 0})
-    if articles.count() > 0:
+    articles = list(articles_col.find({'date': date, 'ticker': ticker},
+                                 {'title': 1, 'publisher': 1, 'article': 1, 'published_at': 1, 'author': 1, '_id': 0}))
+    if len(articles) > 0:
         subject = f'Articles about {ticker} stock published today'
         # Create the body of the email
         body = f'<html><head><style>table {{ border-collapse: collapse; }} th, td {{ border: 1px solid #ddd; padding: 12px; }} th {{ text-align: left; background-color: #f2f2f2; }}</style></head><body style="font-family: Arial, sans-serif;">'
