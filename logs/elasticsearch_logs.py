@@ -1,7 +1,7 @@
 from elasticsearch import Elasticsearch
 
 # create an Elasticsearch client
-es_client = Elasticsearch()
+es_client = Elasticsearch("http://localhost:9200")
 
 # search for the last log message with level INFO
 search_results = es_client.search(
