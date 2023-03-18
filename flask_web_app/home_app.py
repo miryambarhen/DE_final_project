@@ -1,3 +1,4 @@
+import logging
 import time
 import json
 import os
@@ -68,7 +69,7 @@ def index():
 
     except Exception as e:
         # log error
-        write_to_log('registration form', 'Error occurred while retrieving stock data')
+        write_to_log('registration form', 'Error occurred while retrieving stock data', level=logging.CRITICAL)
         # return error message to user
         return "Error occurred while retrieving stock data.", 500
 
@@ -85,7 +86,7 @@ def register():
         data.update({'is_active': 1})
         # Save registration form in MonogoDB
         users.insert_one(data)
-        write_to_log('registration form', f'{data["email_address"]} registered for alerts for{data["stock_ticker"]}')
+        write_to_log('registration form', f'{data["email_address"]} registered for alerts for {data["stock_ticker"]}')
         # Redirect to home page
         return redirect(url_for('index'))
     # pass the formatted ticker data to the template
