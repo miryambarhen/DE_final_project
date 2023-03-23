@@ -1,12 +1,10 @@
 import logging
-import time
 import json
 import os
 import mysql.connector
 from pymongo import MongoClient
 from flask import Flask, render_template, request, flash, redirect, url_for
 from logs.logging_config import write_to_log
-from urllib.parse import urlencode
 
 # Get configuration data
 with open('/tmp/pycharm_project_4/config.json') as f:
@@ -15,7 +13,7 @@ with open('/tmp/pycharm_project_4/config.json') as f:
 # Connect to MongoDB database
 client = MongoClient('mongodb://localhost:27017/')
 db = client['stocks_db']
-col = db["realtime_data"]
+realtime = db["realtime_data"]
 users = db["users"]
 tickers = db["tickers"]
 
@@ -34,7 +32,7 @@ app.secret_key = os.environ.get("SECRET_KEY") or "my-secret-key"
 def index():
     try:
         # retrieve stock data from MongoDB
-        stock_data = col.aggregate([
+        stock_data = realtime.aggregate([
             {"$sort": {"stock_ticker": 1, "time": -1}},
             {
                 "$group": {
