@@ -28,8 +28,8 @@ cursor = db.cursor()
 
 # Get ticker names
 ticker_names = tickers_col.distinct("ticker")
-yesterday = datetime.now()
-_from = yesterday.strftime('%Y-%m-%d')
+today = datetime.now()
+_from = today.strftime('%Y-%m-%d')
 
 # Call the function to receive and load polygon data
 data.load_data(db, cursor, polygon_key, ticker_names, _from, _from)

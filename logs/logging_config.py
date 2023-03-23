@@ -47,4 +47,4 @@ def write_to_log(topic, message, level=logging.INFO):
     try:
         send_to_elasticsearch(log_dict)
     except Exception as e:
-        logger.error("Failed to send log message to Elasticsearch: %s", str(e))
+        logger.log('Elasticsearch', 'Failed to send log message to Elasticsearch', logging.ERROR)
