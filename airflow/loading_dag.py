@@ -10,9 +10,11 @@ sys.path.insert(0, project_dir)
 
 
 # Function to run a Python script using subprocess module
-def load_data_func():
+def load_data_func(script_path):
+    import os
     import subprocess
-    subprocess.run(['python', f'{project_dir}/batch/daily_loading.py'])
+    os.environ['PYTHONPATH'] = f'{project_dir}:{os.environ.get("PYTHONPATH", "")}'
+    subprocess.run(['python', script_path])
 
 
 # Default DAG arguments
@@ -34,6 +36,7 @@ dag = DAG(
 load_data_task = PythonOperator(
     task_id='load_data',
     python_callable=load_data_func,
+    op_kwargs={'script_path': f'{project_dir}/batch/daily_loading.py'},
     dag=dag
 )
 

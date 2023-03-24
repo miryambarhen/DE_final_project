@@ -11,7 +11,9 @@ sys.path.insert(0, project_dir)
 
 # Function to run a Python script using subprocess module
 def run_python_script(script_path):
+    import os
     import subprocess
+    os.environ['PYTHONPATH'] = f'{project_dir}:{os.environ.get("PYTHONPATH", "")}'
     subprocess.run(['python', script_path])
 
 

@@ -1,6 +1,9 @@
 import sys
-from airflow.models import DAG
+import os
+import subprocess
+import pytz
 from datetime import datetime
+from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 
@@ -12,8 +15,9 @@ sys.path.insert(0, project_dir)
 
 # Function to run a Python script using subprocess module
 def run_python_script(script_path):
-    import subprocess
-    subprocess.run(['python', script_path])
+    os.environ['PYTHONPATH'] = f'{project_dir}:{os.environ.get("PYTHONPATH", "")}'
+    output = subprocess.check_output(['python', script_path])
+    print(output)
 
 
 # Default DAG arguments
