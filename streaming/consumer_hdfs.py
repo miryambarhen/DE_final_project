@@ -13,26 +13,26 @@ spark = SparkSession \
     .getOrCreate()
 
 # ReadStream from kafka
-df_kafka = spark\
-    .readStream\
-    .format("kafka")\
-    .option("kafka.bootstrap.servers", bootstrapServers)\
-    .option("subscribe", topic3)\
+df_kafka = spark \
+    .readStream \
+    .format("kafka") \
+    .option("kafka.bootstrap.servers", bootstrapServers) \
+    .option("subscribe", topic3) \
     .load()
 
-
-#Create schema to create df from json
+# Create schema to create df from json
 schema = StructType() \
     .add("stock_ticker", StringType()) \
     .add("current_price", StringType()) \
     .add("time", StringType())
 
-df_realtime_prices = df_kafka.select(col("value").cast("string"))\
-    .select(from_json(col("value"), schema).alias("value"))\
+df_realtime_prices = df_kafka.select(col("value").cast("string")) \
+    .select(from_json(col("value"), schema).alias("value")) \
     .select("value.*")
 
-# cast to currect types
-df_realtime_prices = df_realtime_prices.select(col("stock_ticker"),col("current_price").cast("float"), col("time").cast("timestamp"))
+# cast to correct types
+df_realtime_prices = df_realtime_prices.select(col("stock_ticker"), col("current_price").cast("float"),
+                                               col("time").cast("timestamp"))
 
 stream_to_hdfs = df_realtime_prices \
     .writeStream \

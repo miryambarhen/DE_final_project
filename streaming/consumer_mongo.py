@@ -6,18 +6,17 @@ bootstrapServers = "Cnt7-naya-cdh63:9092"
 # for reading from kafka
 topic2 = "stocks_prices_to_mongo"
 
+## config 1: defining the default collection that we read from
+## config 2: defining the default collection that we write to
+## config 3: defining spark jars packages to contain mongo-spark-connector and spark-kafka-connector
 spark = SparkSession \
     .builder \
-    .appName("real_time_prices_mongo") \
+    .appName("realtime_prices_mongo") \
     .config("spark.mongodb.input.uri", "mongodb://localhost:27017/stocks_db.users") \
     .config("spark.mongodb.output.uri", "mongodb://localhost:27017/stocks_db.realtime_data") \
     .config('spark.jars.packages',
             'org.mongodb.spark:mongo-spark-connector_2.11:2.4.3,org.apache.spark:spark-sql-kafka-0-10_2.11:2.4.3') \
     .getOrCreate()
-
-## config 1: defining the default collection that we read from
-## config 2: defining the default collection that we write to
-## config 3: defining spark jars packages to contain mongo-spark-connector and spark-kafka-connector
 
 # ReadStream from kafka
 df_kafka = spark \
@@ -51,9 +50,8 @@ def write_df_to_mongo(df, epoch_id):
 
 stream_to_mongo = df_realtime_prices \
     .writeStream \
-    .outputMode("append") \
     .foreachBatch(write_df_to_mongo) \
-    .option("checkpointLocation", "checkpoint_mongo") \
+    .option("checkpointLocation", "/user/naya/checkpoint_mongo1") \
     .start()
 
 stream_to_mongo.awaitTermination()

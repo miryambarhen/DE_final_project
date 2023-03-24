@@ -1,8 +1,8 @@
+from kafka import KafkaConsumer
 import json
-import utilities
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-from kafka import KafkaConsumer
+import utilities
 
 # for the consumer
 bootstrapServers = "cnt7-naya-cdh63:9092"
@@ -13,7 +13,7 @@ client = MongoClient('mongodb://localhost:27017')
 mongo_db = client['stocks_db']
 mongo_collection = mongo_db['users']
 
-consumer = KafkaConsumer(topic4, bootstrap_servers=bootstrapServers, auto_offset_reset='latest')
+consumer = KafkaConsumer(topic4, bootstrap_servers=bootstrapServers)
 
 for message in consumer:
     request = json.loads(message.value)
@@ -24,7 +24,6 @@ for message in consumer:
         wanted_price = float(request['price'])
         recipient = request['email_address']
 
-        # Set alert request to un active
         mongo_collection.update_one({"_id": ObjectId(request_id)}, {"$set": {"is_active": 0}})
 
         subject = f'{stock_ticker} got to the price you wanted!'
