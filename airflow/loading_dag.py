@@ -29,10 +29,9 @@ dag = DAG(
     dag_id='loading_dag',
     default_args=default_args,
     description='Loads daily data into MySQL database',
-    schedule_interval='0 22 * * 1-5',  # Run on weekdays at 22:00
+    schedule_interval='45 20 * * 1-5',  # Run on weekdays at 20:45 utc (23:45 israel time)
 )
 
-# Define the task to load daily data
 load_data_task = PythonOperator(
     task_id='load_data',
     python_callable=load_data_func,

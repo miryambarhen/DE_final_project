@@ -1,7 +1,4 @@
-import sys
-import os
-import subprocess
-import pytz
+import sys, os, subprocess
 from datetime import datetime
 from airflow.models import DAG
 from airflow.operators.python_operator import PythonOperator
@@ -29,10 +26,17 @@ default_args = {
 
 # Define the DAG
 dag = DAG(
-    dag_id='streaming_dag',
+    dag_id="streaming_dag",
     default_args=default_args,
-    description='Get real-time New York stock exchange data',
-    schedule_interval='58 8 * * 1-5',  # Run on weekdays at 08:58 AM
+    start_date=datetime(2023, 3, 23),
+    # New York stock exchange works at 9:30-16:00,
+    # in israel time - 16:30-23,
+    # airflow works with utc --> we need to schedule the process to 14:30 (three hours back)
+    schedule_interval='28 13 * * 1-5',  # At 13:28 PM, Monday through Friday
+    tags=['stocks_analysis_and_alerts_final_project'],
+    description='Get real-time stocks prices and sending alerts',
+    max_active_runs=1,
+    catchup=False
 )
 
 # Define the task to run producer
@@ -79,7 +83,7 @@ emails_task = PythonOperator(
 def stop_dag_if_after_16pm():
     now_new_york = datetime.now(pytz.timezone('US/Eastern'))
     if now_new_york.hour >= 16:
-        raise ValueError('DAG stop running after 16:00')
+        raise ValueError("it is 16:00 o'clock! DAG stops running after 16:00")
 
 
 stop_operator = PythonOperator(

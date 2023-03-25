@@ -28,8 +28,8 @@ default_args = {
 dag = DAG(
     dag_id='articles_dag',
     default_args=default_args,
-    description='Get and send articles every day at 20:00',
-    schedule_interval='0 20 * * *',
+    description='Get and send articles every day',  # Run every day at 19:00 utc (20:00 israel time)
+    schedule_interval='0 19 * * *',
 )
 
 # Define the task to get articles
