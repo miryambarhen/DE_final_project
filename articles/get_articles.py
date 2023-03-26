@@ -52,11 +52,11 @@ for ticker in ticker_names:
                 # if the article already exists in the database, write a log entry
                 write_to_log('get articles',
                              f'The article for {ticker} published at {article["published_utc"]} at {article["publisher"]["name"]} already exists in articles collection',
-                             level=logging.ERROR)
+                             level=logging.WARNING)
         # If there are any articles to add for the current ticker
         if articles:
             articles_col.insert_many(articles)
             write_to_log('get articles', f'Get {i + 1} articles for {ticker}')
     else:
-        # If there are no articles for the current ticker, log an warning message
-        write_to_log('get articles', f'No articles about {ticker} were published today', level=logging.WARNING)
+        # If there are no articles for the current ticker, log an info message
+        write_to_log('get articles', f'No articles about {ticker} were published today')

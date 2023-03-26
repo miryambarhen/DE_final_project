@@ -21,7 +21,7 @@ def load_data_func(script_path):
 default_args = {
     'owner': 'Airflow',
     'depends_on_past': False,
-    'start_date': datetime(2023, 3, 5, 22, 0)
+    'start_date': datetime(2023, 3, 5)
 }
 
 # Define the DAG
