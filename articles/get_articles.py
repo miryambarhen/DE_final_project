@@ -36,7 +36,7 @@ for ticker in ticker_names:
     if len(data['results']) > 0:
         for i, article in enumerate(data['results']):
             # check if the article already exists in the database
-            if articles_col.find_one({"title": article['title'], "published_at": article['published_utc']}) is None:
+            if articles_col.find_one({"ticker": ticker, "title": article['title'], "published_at": article['published_utc']}) is None:
                 # if the article does not exist, extract the relevant data and add to the articles list
                 article_data = {
                     'date': date,
@@ -51,7 +51,7 @@ for ticker in ticker_names:
             else:
                 # if the article already exists in the database, write a log entry
                 write_to_log('get articles',
-                             f'The article for {ticker} published at {article["published_utc"]} at {article["author"]} already exists in articles collection',
+                             f'The article for {ticker} published at {article["published_utc"]} at {article["publisher"]["name"]} already exists in articles collection',
                              level=logging.ERROR)
         # If there are any articles to add for the current ticker
         if articles:
