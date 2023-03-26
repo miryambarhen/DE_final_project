@@ -12,6 +12,7 @@ topic4 = "users_emails"
 ## config 1: defining the default collection that we read from
 ## config 2: defining the default collection that we write to
 ## config 3: defining spark jars packages to contain mongo-spark-connector and spark-kafka-connector
+
 spark = SparkSession \
     .builder \
     .appName("realtime_prices_kafka") \
@@ -73,7 +74,7 @@ stream_to_kafka = df_users_to_send_emails \
     .format('kafka') \
     .option("kafka.bootstrap.servers", bootstrapServers) \
     .option("topic", topic4) \
-    .option("checkpointLocation", 'checkpointLocation_kafka1') \
+    .option("checkpointLocation", '/user/naya/checkpointLocation_kafka1') \
     .start()
 
 stream_to_kafka.awaitTermination()

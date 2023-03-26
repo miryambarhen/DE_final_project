@@ -24,6 +24,7 @@ for message in consumer:
         wanted_price = float(request['price'])
         recipient = request['email_address']
 
+        # update the user request to unactive
         mongo_collection.update_one({"_id": ObjectId(request_id)}, {"$set": {"is_active": 0}})
 
         subject = f'{stock_ticker} got to the price you wanted!'
