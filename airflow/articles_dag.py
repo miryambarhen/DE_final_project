@@ -28,7 +28,7 @@ default_args = {
 dag = DAG(
     dag_id='articles_dag',
     default_args=default_args,
-    description='Get and send articles every day',  # Run every day at 19:00 utc (20:00 israel time)
+    description='Get and send articles every day',  # Run every day at 19:00 utc (22:00 israel time)
     schedule_interval='0 19 * * *',
 )
 
