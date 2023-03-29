@@ -8,13 +8,12 @@ db = client["stocks_db"]
 users_col = db["users"]
 articles_col = db["articles"]
 
-# Find distinct active users who have enabled news notifications
-alerts = users_col.distinct('email_address', {'news': 'on', 'is_active': 1})
-
 # Find all active users who have enabled news notifications
 alerts = [
     {'$match': {'news': 'on', 'is_active': 1}},  # Filter for active alerts
-    {'$group': {'_id': {'first_name': '$first_name', 'email_address': '$email_address', 'stock_ticker': '$stock_ticker'}}} # Group by email and ticker
+    {'$group': {
+        '_id': {'first_name': '$first_name', 'email_address': '$email_address', 'stock_ticker': '$stock_ticker'}}}
+    # Group by email and ticker
 ]
 alerts = list(users_col.aggregate(alerts))
 

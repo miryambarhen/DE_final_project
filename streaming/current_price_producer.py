@@ -4,11 +4,11 @@ from kafka import KafkaProducer
 from pymongo import MongoClient
 from time import sleep
 
-with open('/tmp/pycharm_project_3/config.json') as f:
+with open('/tmp/pycharm_project_4/config.json') as f:
     config = json.load(f)
     rapidApi_key = config['rapidApi_key']
 
-topics = ['stocks_prices_to_mongo', 'stocks_prices_to_hdfs']
+topics = ['stocks_prices_to_mongo', 'stocks_prices_to_s3']
 brokers = ['cnt7-naya-cdh63:9092']
 
 producer = KafkaProducer(
